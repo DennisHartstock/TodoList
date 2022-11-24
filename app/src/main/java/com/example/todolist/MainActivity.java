@@ -1,5 +1,6 @@
 package com.example.todolist;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -32,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
             notes.add(note);
         }
         showNotes();
+
+        btAddNote.setOnClickListener(view -> {
+            Intent intent = AddNoteActivity.newIntent(MainActivity.this);
+            startActivity(intent);
+        });
     }
 
     private void initViews() {
