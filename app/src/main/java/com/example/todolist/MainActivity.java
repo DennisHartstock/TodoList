@@ -12,9 +12,10 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Database database = new Database();
 
     private LinearLayout llNotes;
     private FloatingActionButton btAddNote;
@@ -26,12 +27,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-
-        Random random = new Random();
-        for (int i = 0; i < 20; i++) {
-            Note note = new Note(i, "Note " + i, random.nextInt(3));
-            notes.add(note);
-        }
         showNotes();
 
         btAddNote.setOnClickListener(view -> {
@@ -47,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showNotes() {
 
-        for (Note note : notes) {
+        for (Note note : database.getNotes()) {
             View view = getLayoutInflater().inflate(R.layout.note_item, llNotes, false);
             TextView tvNote = view.findViewById(R.id.tvNote);
             tvNote.setText(note.getText());
