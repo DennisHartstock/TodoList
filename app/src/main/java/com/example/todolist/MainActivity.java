@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Database database = new Database();
+    private Database database = Database.getInstance();
 
     private LinearLayout llNotes;
     private FloatingActionButton btAddNote;
@@ -27,12 +27,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-        showNotes();
 
         btAddNote.setOnClickListener(view -> {
             Intent intent = AddNoteActivity.newIntent(MainActivity.this);
             startActivity(intent);
         });
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        showNotes();
     }
 
     private void initViews() {
@@ -41,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showNotes() {
+        llNotes.removeAllViews();
 
         for (Note note : database.getNotes()) {
             View view = getLayoutInflater().inflate(R.layout.note_item, llNotes, false);

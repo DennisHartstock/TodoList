@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class AddNoteActivity extends AppCompatActivity {
 
+    private Database database = Database.getInstance();
+
     private EditText etNote;
     private RadioButton rbLow;
     private RadioButton rbMedium;
@@ -34,8 +36,14 @@ public class AddNoteActivity extends AppCompatActivity {
         if (etNote == null) {
             Toast.makeText(this, "Enter new note", Toast.LENGTH_SHORT).show();
         } else {
+            int id = database.getNotes().size();
             String text = etNote.getText().toString().trim();
             int priority = getPriority();
+
+            Note note = new Note(id, text, priority);
+            database.add(note);
+
+            finish();
         }
     }
 
