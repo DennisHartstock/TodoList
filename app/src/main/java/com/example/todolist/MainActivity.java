@@ -53,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
             TextView tvNote = view.findViewById(R.id.tvNote);
             tvNote.setText(note.getText());
 
+            view.setOnClickListener(view1 -> {
+                database.remove(note.getId());
+                showNotes();
+            });
+
             int colorResId;
             switch (note.getPriority()) {
                 case 0:
