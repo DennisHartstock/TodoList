@@ -3,24 +3,20 @@ package com.example.todolist;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
 
-    private Database database = Database.getInstance();
-
-    private LinearLayout llNotes;
+    private RecyclerView rvNotes;
     private FloatingActionButton btAddNote;
 
-    private ArrayList<Note> notes = new ArrayList<>();
+    private final Database database = Database.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        llNotes = findViewById(R.id.llNotes);
+        rvNotes = findViewById(R.id.rvNotes);
         btAddNote = findViewById(R.id.btAddNote);
     }
 

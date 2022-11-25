@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class AddNoteActivity extends AppCompatActivity {
 
-    private Database database = Database.getInstance();
+    private final Database database = Database.getInstance();
 
     private EditText etNote;
     private RadioButton rbLow;

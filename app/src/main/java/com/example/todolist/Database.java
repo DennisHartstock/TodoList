@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Database {
 
-    private ArrayList<Note> notes = new ArrayList<>();
+    private final ArrayList<Note> notes = new ArrayList<>();
     private static Database instance = null;
 
     public static Database getInstance() {
@@ -18,7 +18,7 @@ public class Database {
 
     private Database() {
         Random random = new Random();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 20_000; i++) {
             Note note = new Note(i, "Note " + i, random.nextInt(3));
             notes.add(note);
         }
