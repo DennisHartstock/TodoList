@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class AddNoteActivity extends AppCompatActivity {
 
-    private final Database database = Database.getInstance();
+    private NoteDatabase noteDatabase;
 
     private EditText etNote;
     private RadioButton rbLow;
@@ -23,6 +23,8 @@ public class AddNoteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
+
+        noteDatabase = NoteDatabase.getInstance(getApplication());
         initViews();
 
         btSave.setOnClickListener(view -> {
@@ -36,12 +38,11 @@ public class AddNoteActivity extends AppCompatActivity {
         if (etNote == null) {
             Toast.makeText(this, "Enter new note", Toast.LENGTH_SHORT).show();
         } else {
-            int id = database.getNotes().size();
             String text = etNote.getText().toString().trim();
             int priority = getPriority();
 
-            Note note = new Note(id, text, priority);
-            database.add(note);
+            Note note = new Note(text, priority);
+            noteDatabase.notesDao().add(note);
 
             finish();
         }
