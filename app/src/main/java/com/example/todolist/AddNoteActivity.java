@@ -3,6 +3,8 @@ package com.example.todolist;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -13,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class AddNoteActivity extends AppCompatActivity {
 
     private NoteDatabase noteDatabase;
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     private EditText etNote;
     private RadioButton rbLow;
@@ -42,9 +45,11 @@ public class AddNoteActivity extends AppCompatActivity {
             int priority = getPriority();
 
             Note note = new Note(text, priority);
-            noteDatabase.notesDao().add(note);
-
-            finish();
+            Thread thread = new Thread(() -> {
+                noteDatabase.notesDao().add(note);
+                handler.post(this::finish);
+            });
+            thread.start();
         }
     }
 
