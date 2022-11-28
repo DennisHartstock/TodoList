@@ -2,6 +2,7 @@ package com.example.todolist;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,14 +25,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         viewModel = new MainViewModel(getApplication());
+        viewModel.getCount().observe(this, count -> Toast.makeText(
+                MainActivity.this,
+                String.valueOf(count),
+                Toast.LENGTH_SHORT
+        ).show());
 
         initViews();
 
         notesAdapter = new NotesAdapter();
 
-        notesAdapter.setOnNoteClickListener(note -> {
-
-        });
+        notesAdapter.setOnNoteClickListener(note -> viewModel.showCount());
 
         rvNotes.setAdapter(notesAdapter);
 
@@ -52,7 +56,10 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                    public void onSwiped(
+                            @NonNull RecyclerView.ViewHolder viewHolder,
+                            int direction
+                    ) {
                         int position = viewHolder.getAdapterPosition();
                         Note note = notesAdapter.getNotes().get(position);
                         viewModel.remove(note);
