@@ -16,14 +16,15 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton btAddNote;
     private NotesAdapter notesAdapter;
 
-    private NoteDatabase noteDatabase;
+    private MainViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        noteDatabase = NoteDatabase.getInstance(getApplication());
+        viewModel = new MainViewModel(getApplication());
+
         initViews();
 
         notesAdapter = new NotesAdapter();
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         rvNotes.setAdapter(notesAdapter);
 
-        noteDatabase.notesDao().getNotes().observe(this, notes -> notesAdapter.setNotes(notes));
+        viewModel.getNotes().observe(this, notes -> notesAdapter.setNotes(notes));
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(
@@ -54,8 +55,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                         int position = viewHolder.getAdapterPosition();
                         Note note = notesAdapter.getNotes().get(position);
-
-                        new Thread(() -> noteDatabase.notesDao().remove(note.getId())).start();
+                        viewModel.remove(note);
                     }
                 });
         itemTouchHelper.attachToRecyclerView(rvNotes);
