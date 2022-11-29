@@ -8,9 +8,9 @@ import androidx.room.PrimaryKey;
 public class Note {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
-    private String text;
-    private int priority;
+    private final int id;
+    private final String text;
+    private final int priority;
 
     public Note(int id, String text, int priority) {
         this.id = id;
