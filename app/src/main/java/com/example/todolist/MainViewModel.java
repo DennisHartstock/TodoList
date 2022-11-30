@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class MainViewModel extends AndroidViewModel {
 
     private final NoteDatabase noteDatabase;
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private final MutableLiveData<List<Note>> notes = new MutableLiveData<>();
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -25,14 +27,25 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Note>> getNotes() {
-        return noteDatabase.notesDao().getNotes();
+        return notes;
+    }
+
+    public void refreshList() {
+        Disposable disposable = noteDatabase.notesDao().getNotes()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(notes::setValue);
+        compositeDisposable.add(disposable);
     }
 
     public void remove(Note note) {
         Disposable disposable = noteDatabase.notesDao().remove(note.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> Log.d("MainViewModel", "Removed: " + note.getId()));
+                .subscribe(() -> {
+                    Log.d("MainViewModel", "Removed: " + note.getId());
+                    refreshList();
+                });
         compositeDisposable.add(disposable);
     }
 
