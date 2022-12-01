@@ -63,12 +63,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        viewModel.refreshList();
-    }
-
     private void initViews() {
         rvNotes = findViewById(R.id.rvNotes);
         btAddNote = findViewById(R.id.btAddNote);
